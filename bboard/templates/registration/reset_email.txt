@@ -1,0 +1,6 @@
+{% autoescape off %}
+Уважаемый {{ user.username }}
+Вы отправили запрос на сброс пароля. Чтобы выполнить сброс перейдите по этой ссылке:
+{{ protocol}}://{{domain}}{% url 'bboard:password_reset_confirm' uidb64=uid token=token %}
+Досвидания
+{% endautoescape %}

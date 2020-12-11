@@ -1,0 +1,11 @@
+{% extends "layout/basic.html" %}
+{% block title %}Добавление объявления{% endblock %}
+{% block content %}
+
+<form enctype="multipart/form-data" action="{% url 'bboard:add_picture' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Добавить">
+</form>
+
+{% endblock content %}

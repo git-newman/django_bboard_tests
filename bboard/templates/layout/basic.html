@@ -1,0 +1,67 @@
+{% load static %}
+{% load bootstrap4 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='slim' %}
+
+{% bootstrap_messages %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <title>{% block title %}Главная{% endblock title %} - Доска объявлений</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'bboard/style.css' %}">
+    </head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top col-sm-12">
+    <a class="navbar-brand" href="{% url 'bboard:index' %}">Site name</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+
+            {% if not user.is_authenticated %}
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'bboard:login' %}">Войти<span class="sr-only">(current)</span></a>
+            </li>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'bboard:logout' %}">Выйти<span class="sr-only">(current)</span></a>
+            </li>
+            {% endif %}
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Рубрики</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                    {% for rubric in rubrics %}
+                        <a class="dropdown-item" href="{% url 'bboard:by_rubric' rubric.id %}">{{ rubric.name }}</a>
+                    {% endfor %}
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'bboard:add' %}">Добавить <span class="sr-only">(current)</span></a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+
+    </div>
+</nav>
+
+<div class="container-fluid" style="margin-top:80px">
+        {% block content %}
+        {% endblock %}
+</div>
+
+</body>
+</html>

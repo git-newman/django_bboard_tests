@@ -1,0 +1,54 @@
+{% extends "layout/basic.html" %}
+
+{% load thumbnail %}
+
+{% block content %}
+{% for bb in bbs %}
+<div>
+    <h2><a href="{% url 'bboard:detail' pk=bb.pk %}">{{ bb.title }}</a></h2>
+    <p>{{ bb.content }} </p>
+    <p>{{ bb.published|date:"d.m.Y h:i:s" }}</p>
+    <p><a href="{% url 'bboard:edit' pk=bb.pk %}">Изменить</a> - <a href="{% url 'bboard:delete' pk=bb.pk %}">Удалить</a></p>
+</div>
+{% endfor %}
+
+<div>
+    <ui class="pagination">
+        {% if page.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page.previous_page_number }}">&laquo;</a></li>
+        {% endif %}
+        {% for page_num in page_list %}
+            {% if page_num == page.number %}
+                <li class="page-item active"> <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a> </li>
+            {% else %}
+                <li class="page-item"> <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a> </li>
+            {% endif %}
+        {% endfor %}
+        {% if page.has_next %}
+            <a class="page-link" href="?page={{ page.next_page_number }}">&raquo;</a>
+        {% endif %}
+    </ui>
+</div>
+
+{% for img in imgs %}
+<div>
+    <div class="modal fade" id="id{{ img.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered " role="document">
+        <!--Content-->
+            <div class="modal-content">
+                <!--Body-->
+                <div class="modal-body">
+                    <div>
+                        <img src="{{ img.img.url }}" class="modal-body col-sm" >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a><img class="img-fluid z-depth-1" src="{% thumbnail img.img 'default' %}"
+        data-toggle="modal" data-target="#id{{ img.id }}"></a>
+{% endfor %}
+
+{% endblock content%}
